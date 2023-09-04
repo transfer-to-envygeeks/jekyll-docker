@@ -1,4 +1,4 @@
-base_image: ruby:3.2.2-alpine3.18
+base_image: ruby:3.1-alpine
 user: jvconseil
 aliases:
   latest: 4.3.2
