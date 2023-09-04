@@ -32,7 +32,6 @@ gems:
     - kramdown
     - minima
     - RedCloth
-    - semver
     - s3_website
   group:
     pages:
