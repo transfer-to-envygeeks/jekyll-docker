@@ -1,12 +1,12 @@
 base_image: ruby:3-alpine
 user: jvconseil
 aliases:
-  latest: 4.3.2
-  stable: 4.3.2
-  4.0: 4.3.2
-  4: 4.3.2
+  latest: 4.3.3
+  stable: 4.3.3
+  4.0: 4.3.3
+  4: 4.3.3
 tags:
-  4.3.2: stable
+  4.3.3: stable
   pages: pages
 releases:
   tag:

@@ -33,7 +33,7 @@ The builder image (`jvconseil/jekyll-docker`) comes with extra stuff that is not
 #### Usage
 
 ```sh
-export JEKYLL_VERSION=4.3.2
+export JEKYLL_VERSION=4.3.3
 docker run --rm \
   --volume="$PWD:/srv/jekyll:Z" \
   -it jvconseil/jekyll-docker:$JEKYLL_VERSION \
@@ -47,7 +47,7 @@ The standard images (`jvconseil/jekyll`) include a default set of "dev" packages
 #### Usage
 
 ```sh
-export JEKYLL_VERSION=4.3.2
+export JEKYLL_VERSION=4.3.3
 docker run --rm \
   --volume="$PWD:/srv/jekyll:Z" \
   -it jvconseil/jekyll:$JEKYLL_VERSION \
@@ -83,7 +83,7 @@ The minimal image (`jvconseil/jekyll-minimal`) skips all the extra gems, all the
 ***You will need to provide a `.apk` file if you intend to use anything like Nokogiri or otherwise, we do not install any development headers or dependencies so C based gems will fail to install.***
 
 ```sh
-export JEKYLL_VERSION=4.3.2
+export JEKYLL_VERSION=4.3.3
 docker run --rm \
   --volume="$PWD:/srv/jekyll:Z" \
   -it jvconseil/jekyll-minimal:$JEKYLL_VERSION \
@@ -114,14 +114,14 @@ docker run --rm \
 
 ## Dependencies
 
-Jekyll Docker will attempt to install any dependencies that you list inside of your `Gemfile`, matching the versions you have in your `Gemfile.lock`, including Jekyll if you have a version that does not match the version of the image you are using (you should be doing `gem "jekyll", "~> 4.3.2"` so that minor versions are installed if you use say image tag "3.7.3").
+Jekyll Docker will attempt to install any dependencies that you list inside of your `Gemfile`, matching the versions you have in your `Gemfile.lock`, including Jekyll if you have a version that does not match the version of the image you are using (you should be doing `gem "jekyll", "~> 4.3.3"` so that minor versions are installed if you use say image tag "3.7.3").
 
 ### Updating
 
 If you provide a `Gemfile` and would like to update your `Gemfile.lock` you can run
 
 ```sh
-export JEKYLL_VERSION=4.3.2
+export JEKYLL_VERSION=4.3.3
 docker run --rm \
   --volume="$PWD:/srv/jekyll:Z" \
   -it jvconseil/jekyll:$JEKYLL_VERSION \
@@ -139,7 +139,7 @@ You can enable caching in Jekyll Docker by using a `docker --volume` that points
 ### Usage
 
 ```sh
-export JEKYLL_VERSION=4.3.2
+export JEKYLL_VERSION=4.3.3
 docker run --rm \
   --volume="$PWD:/srv/jekyll:Z" \
   --volume="$PWD/vendor/bundle:/usr/local/bundle:Z" \
@@ -180,4 +180,3 @@ If this project helps you, you can offer me a cup of coffee ☕️ :-)
 <!-- links -->
 
 [2]: http://jekyllrb.com/docs/configuration/#build-command-options
-

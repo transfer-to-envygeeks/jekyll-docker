@@ -25,7 +25,7 @@ jobs:
     # --
     env: "\
       DOCKER_REPO='\
-        jekyll:4.3.2 \
+        jekyll:4.3.3 \
         jekyll:stable \
         jekyll:latest \
         jekyll:pages \
@@ -38,7 +38,7 @@ jobs:
     # --
     - env: "\
         DOCKER_REPO='\
-        jekyll-docker:4.3.2 \
+        jekyll-docker:4.3.3 \
         jekyll-docker:stable \
         jekyll-docker:latest \
         jvconseil:jekyll-docker \
@@ -52,7 +52,7 @@ jobs:
   # --
   - env: "\
       DOCKER_REPO='\
-        jekyll-minimal:4.3.2 \
+        jekyll-minimal:4.3.3 \
         jekyll-minimal:stable \
         jekyll-minimal:latest \
         jvconseil:jekyll-minimal \

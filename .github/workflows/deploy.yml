@@ -24,18 +24,18 @@ jobs:
       matrix:
         env:
           # -
-          #   - jekyll:4.3.2
+          #   - jekyll:4.3.3
           #   - jekyll:stable
           #   - jekyll:latest
           #   - jekyll:4.0
           #   - jekyll:4
-          - - jekyll-docker:4.3.2
+          - - jekyll-docker:4.3.3
             - jekyll-docker:stable
             - jekyll-docker:latest
             - jekyll-docker:4.0
             - jekyll-docker:4
           # -
-          #   - jekyll-minimal:4.3.2
+          #   - jekyll-minimal:4.3.3
           #   - jekyll-minimal:stable
           #   - jekyll-minimal:latest
           #   - jekyll-minimal:4.0
