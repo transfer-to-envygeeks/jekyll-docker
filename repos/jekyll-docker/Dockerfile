@@ -130,8 +130,7 @@ RUN unset GEM_HOME && unset GEM_BIN && \
 
 RUN unset GEM_HOME && unset GEM_BIN && yes | gem install --force bundler
 RUN gem install jekyll -v<%= @meta.release?? \
-  @meta.release : @meta.tag %> -- \
-    --use-system-libraries
+  @meta.release : @meta.tag %> --
 
 #
 # Gems
@@ -140,8 +139,7 @@ RUN gem install jekyll -v<%= @meta.release?? \
 
 <% if @meta.gems? %>
   # Stops slow Nokogiri!
-  RUN gem install <%=@meta.gems %> -- \
-    --use-system-libraries
+  RUN gem install <%=@meta.gems %> --
 <% end %>
 
 RUN addgroup -Sg 1000 jekyll
