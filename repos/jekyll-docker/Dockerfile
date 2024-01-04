@@ -48,7 +48,7 @@ ENV LANGUAGE=en_US
 #
 
 <% if @meta.env? %>
-  ENV <%= @meta.env %>
+ENV <%= @meta.env %>
 <% end %>
 
 #
@@ -56,9 +56,9 @@ ENV LANGUAGE=en_US
 # Main
 #
 
-env VERBOSE=false
-env FORCE_POLLING=false
-env DRAFTS=false
+ENV VERBOSE=false
+ENV FORCE_POLLING=false
+ENV DRAFTS=false
 
 #
 # Packages
@@ -66,7 +66,7 @@ env DRAFTS=false
 #
 
 <% if @meta.packages? %>
-  RUN apk --no-cache add <%= @meta.packages %>
+RUN apk --no-cache add <%= @meta.packages %>
 <% end %>
 
 #
@@ -129,8 +129,10 @@ RUN unset GEM_HOME && unset GEM_BIN && \
 #
 
 RUN unset GEM_HOME && unset GEM_BIN && yes | gem install --force bundler
-RUN gem install jekyll -v<%= @meta.release?? \
-  @meta.release : @meta.tag %> --
+# RUN gem install jekyll -v<%= @meta.release?? \
+#   @meta.release : @meta.tag %> -- \
+#     --use-system-libraries
+RUN gem install jekyll -v<%= @meta.release?? @meta.release : @meta.tag %>
 
 #
 # Gems
@@ -138,8 +140,10 @@ RUN gem install jekyll -v<%= @meta.release?? \
 #
 
 <% if @meta.gems? %>
-  # Stops slow Nokogiri!
-  RUN gem install <%=@meta.gems %> --
+# Stops slow Nokogiri!
+# RUN gem install <%=@meta.gems %> -- \
+#   --use-system-libraries
+RUN gem install <%=@meta.gems %>
 <% end %>
 
 RUN addgroup -Sg 1000 jekyll
@@ -152,23 +156,23 @@ RUN adduser  -Su 1000 -G \
 #
 
 <% if @meta.name == "minimal" || @meta.name == "pages" || @meta.tag == "pages" %>
-  RUN apk --no-cache del \
-    linux-headers \
-    openjdk8-jre \
-    zlib-dev \
-    build-base \
-    libxml2-dev \
-    libxslt-dev \
-    readline-dev \
-    imagemagick-dev\
-    libffi-dev \
-    ruby-dev \
-    yaml-dev \
-    zlib-dev \
-    libffi-dev \
-    vips-dev \
-    vips-tools \
-    cmake
+RUN apk --no-cache del \
+  linux-headers \
+  openjdk8-jre \
+  zlib-dev \
+  build-base \
+  libxml2-dev \
+  libxslt-dev \
+  readline-dev \
+  imagemagick-dev\
+  libffi-dev \
+  ruby-dev \
+  yaml-dev \
+  zlib-dev \
+  libffi-dev \
+  vips-dev \
+  vips-tools \
+  cmake
 <% end %>
 
 RUN mkdir -p $JEKYLL_VAR_DIR
