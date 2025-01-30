@@ -19,16 +19,6 @@ jobs:
 
     name: "Deploy"
 
-    strategy:
-      fail-fast: false
-      matrix:
-        env:
-          - - jekyll-docker:4.4.1
-            - jekyll-docker:stable
-            - jekyll-docker:latest
-            - jekyll-docker:4.0
-            - jekyll-docker:4
-
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4

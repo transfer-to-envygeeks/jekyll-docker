@@ -11,7 +11,7 @@
 
 FROM ruby:3-alpine
 LABEL maintainer="JV conseil <contact@jv-conseil.net>"
-# COPY docker/site/copy /
+COPY / /
 
 #
 # EnvVars
