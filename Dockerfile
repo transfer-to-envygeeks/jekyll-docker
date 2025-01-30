@@ -1,5 +1,17 @@
-FROM <%= @meta.base_image %>
-LABEL maintainer "JV conseil <contact@jv-conseil.net>"
+#!/bin/sh
+#
+# Script Name : Dockerfile
+# Description : ...
+# Created     : January 30, 2025
+# Author      : JV-conseil
+# Contact     : contact@jv-conseil.dev
+# Website     : https://www.jv-conseil.dev
+# Copyright   : (c) 2025 JV-conseil
+#               All rights reserved
+# ========================================================
+
+FROM ruby:3-alpine
+LABEL maintainer="JV conseil <contact@jv-conseil.net>"
 COPY copy /
 
 #
@@ -7,10 +19,10 @@ COPY copy /
 # Ruby
 #
 
-ENV BUNDLE_HOME=/usr/local/bundle
 ENV BUNDLE_APP_CONFIG=/usr/local/bundle
-ENV BUNDLE_DISABLE_PLATFORM_WARNINGS=truex
 ENV BUNDLE_BIN=/usr/local/bundle/bin
+ENV BUNDLE_DISABLE_PLATFORM_WARNINGS=truex
+ENV BUNDLE_HOME=/usr/local/bundle
 ENV GEM_BIN=/usr/gem/bin
 ENV GEM_HOME=/usr/gem
 ENV RUBYOPT=-W0
@@ -20,14 +32,14 @@ ENV RUBYOPT=-W0
 # Image
 #
 
-ENV JEKYLL_VAR_DIR=/var/jekyll
-ENV JEKYLL_DOCKER_TAG=<%= @meta.tag %>
-ENV JEKYLL_VERSION=<%= @meta.release?? @meta.release : @meta.tag %>
-ENV JEKYLL_DOCKER_COMMIT=<%= `git rev-parse --verify HEAD`.strip %>
-ENV JEKYLL_DOCKER_NAME=<%= @meta.name %>
-ENV JEKYLL_DATA_DIR=/srv/jekyll
 ENV JEKYLL_BIN=/usr/jekyll/bin
-ENV JEKYLL_ENV=development
+ENV JEKYLL_DATA_DIR=/srv/jekyll
+ENV JEKYLL_DOCKER_COMMIT=03f4cd4adc82c50365e08ef784a58de41fda2be2
+ENV JEKYLL_DOCKER_NAME=jekyll-docker
+ENV JEKYLL_ENV=production
+ENV JEKYLL_VAR_DIR=/var/jekyll
+ENV JEKYLL_VERSION=4.4.1
+ENV JEKYLL_DOCKER_TAG=$JEKYLL_VERSION
 
 #
 # EnvVars
@@ -36,20 +48,11 @@ ENV JEKYLL_ENV=development
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
-ENV TZ=America/Chicago
+ENV TZ=Europe/Paris
 ENV PATH="$JEKYLL_BIN:$PATH"
 ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US
-
-#
-# EnvVars
-# User
-#
-
-<% if @meta.env? %>
-ENV <%= @meta.env %>
-<% end %>
 
 #
 # EnvVars
@@ -65,9 +68,10 @@ ENV DRAFTS=false
 # User
 #
 
-<% if @meta.packages? %>
-RUN apk --no-cache add <%= @meta.packages %>
-<% end %>
+RUN apk --no-cache add \
+  lftp \
+  openssh-client \
+  rsync
 
 #
 # Packages
@@ -75,20 +79,18 @@ RUN apk --no-cache add <%= @meta.packages %>
 #
 
 RUN apk --no-cache add \
-  zlib-dev \
-  libffi-dev \
   build-base \
-  libxml2-dev \
+  cmake \
   imagemagick-dev \
-  readline-dev \
-  libxslt-dev \
   libffi-dev \
-  yaml-dev \
-  zlib-dev \
+  libxml2-dev \
+  libxslt-dev \
+  readline-dev \
+  sqlite-dev \
   vips-dev \
   vips-tools \
-  sqlite-dev \
-  cmake
+  yaml-dev \
+  zlib-dev
 
 #
 # Packages
@@ -96,23 +98,23 @@ RUN apk --no-cache add \
 #
 
 RUN apk --no-cache add \
-  linux-headers \
-  openjdk8-jre \
-  less \
-  zlib \
-  libxml2 \
-  readline \
-  libxslt \
-  libffi \
-  git \
-  nodejs \
-  tzdata \
-  shadow \
   bash \
-  su-exec \
-  npm \
+  git \
+  less \
+  libffi \
   libressl \
-  yarn
+  libxml2 \
+  libxslt \
+  linux-headers \
+  nodejs \
+  npm \
+  openjdk8-jre \
+  readline \
+  shadow \
+  su-exec \
+  tzdata \
+  yarn \
+  zlib
 
 #
 # Gems
@@ -137,11 +139,30 @@ RUN gem install jekyll -v$JEKYLL_VERSION
 # User
 #
 
-<% if @meta.gems? %>
-# Stops slow Nokogiri!
-# RUN gem install <%=@meta.gems %> --use-system-libraries
-RUN gem install <%=@meta.gems %>
-<% end %>
+RUN gem install \
+  html-proofer \
+  jekyll-avatar \
+  jekyll-coffeescript \
+  jekyll-compose \
+  jekyll-default-layout \
+  jekyll-docs \
+  jekyll-feed \
+  jekyll-include-cache \
+  jekyll-last-modified-at \
+  jekyll-mentions \
+  jekyll-optional-front-matter \
+  jekyll-paginate \
+  jekyll-readme-index \
+  jekyll-redirect-from \
+  jekyll-relative-links \
+  jekyll-sass-converter \
+  jekyll-seo-tag \
+  jekyll-sitemap \
+  jekyll-titles-from-headings \
+  jemoji \
+  kramdown \
+  minima \
+  RedCloth s3_website
 
 RUN addgroup -Sg 1000 jekyll
 RUN adduser  -Su 1000 -G \
@@ -152,25 +173,21 @@ RUN adduser  -Su 1000 -G \
 # And on pages.  Gems are unsupported.
 #
 
-<% if @meta.name == "minimal" || @meta.name == "pages" || @meta.tag == "pages" %>
-RUN apk --no-cache del \
-  linux-headers \
-  openjdk8-jre \
-  zlib-dev \
-  build-base \
-  libxml2-dev \
-  libxslt-dev \
-  readline-dev \
-  imagemagick-dev\
-  libffi-dev \
-  ruby-dev \
-  yaml-dev \
-  zlib-dev \
-  libffi-dev \
-  vips-dev \
-  vips-tools \
-  cmake
-<% end %>
+# RUN apk --no-cache del \
+#   build-base \
+#   cmake \
+#   imagemagick-dev\
+#   libffi-dev \
+#   libxml2-dev \
+#   libxslt-dev \
+#   linux-headers \
+#   openjdk8-jre \
+#   readline-dev \
+#   ruby-dev \
+#   vips-dev \
+#   vips-tools \
+#   yaml-dev \
+#   zlib-dev
 
 RUN mkdir -p $JEKYLL_VAR_DIR
 RUN mkdir -p $JEKYLL_DATA_DIR

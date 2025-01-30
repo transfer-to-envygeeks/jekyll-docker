@@ -1,13 +1,5 @@
 {
   "recommendations": [
-    "dbaeumer.vscode-eslint",
-    "editorconfig.editorconfig",
-    "timonwong.shellcheck",
-    "yzhang.markdown-all-in-one",
-    "davidanson.vscode-markdownlint",
-    "foxundermoon.shell-format",
-    "bierner.markdown-emoji",
-    "esbenp.prettier-vscode",
     "dotjoshjohnson.xml"
   ]
 }

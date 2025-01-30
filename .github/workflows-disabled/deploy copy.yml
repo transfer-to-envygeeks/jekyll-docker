@@ -1,7 +1,7 @@
 # Deploy to Docker Hub
 # See <https://hub.docker.com/repository/docker/jvconseil/jekyll-docker/general>
 # Copyright (c) 2019-2023 JV-conseil, All rights reserved
-name: "Publish Docker image"
+name: "Deploy"
 
 on:
   push:
@@ -30,21 +30,34 @@ jobs:
             - jekyll-docker:4
 
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      - name: Log in to Docker Hub
+      - name: "Setup Ruby"
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - run: bundle install
+
+      - name: "Docker Experimental"
+        run: |
+          echo $'{\n    "experimental": true\n}' | \
+            sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker
+
+      - name: "Login to Docker Hub"
+        # uses: docker/login-action@v2
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: user/app:latest
-          labels: user/app:latest
+      - run: bundle exec docker-template build $DOCKER_REPO --no-push --force --squash
+        env:
+          RUBYOPT: "-W0"
+          DOCKER_REPO: "${{ join(matrix.env, ' ') }}"
+
+      - run: bundle exec docker-template push $DOCKER_REPO
+        env:
+          RUBYOPT: "-W0"
+          DOCKER_REPO: "${{ join(matrix.env, ' ') }}"
