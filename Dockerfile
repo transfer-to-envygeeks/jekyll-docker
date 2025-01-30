@@ -37,7 +37,7 @@ ENV JEKYLL_DOCKER_COMMIT="$(/usr/bin/git rev-parse --verify HEAD)"
 ENV JEKYLL_DOCKER_NAME=jekyll-docker
 ENV JEKYLL_ENV=production
 ENV JEKYLL_VAR_DIR=/var/jekyll
-ENV JEKYLL_VERSION="4.4.1"
+ENV JEKYLL_VERSION=4.4.1
 ENV JEKYLL_DOCKER_TAG=$JEKYLL_VERSION
 
 #
@@ -106,7 +106,7 @@ RUN unset GEM_HOME && unset GEM_BIN && \
 
 RUN unset GEM_HOME && unset GEM_BIN && yes | gem install --force bundler
 # RUN gem install jekyll -v<%= @meta.release?? @meta.release : @meta.tag %> --use-system-libraries
-RUN gem install jekyll -v$JEKYLL_VERSION
+RUN gem install --backtrace jekyll -v$JEKYLL_VERSION
 
 #
 # Gems
@@ -136,7 +136,10 @@ RUN gem install \
   jemoji \
   kramdown \
   minima \
-  RedCloth s3_website
+  RedCloth \
+  s3_website
+
+
 
 RUN addgroup -Sg 1000 jekyll
 RUN adduser  -Su 1000 -G \
