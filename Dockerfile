@@ -34,7 +34,7 @@ ENV RUBYOPT=-W0
 
 ENV JEKYLL_BIN=/usr/jekyll/bin
 ENV JEKYLL_DATA_DIR=/srv/jekyll
-ENV JEKYLL_DOCKER_COMMIT=a8a1a4935dd2d6c3fc699444da77b159ee44d4a0
+ENV JEKYLL_DOCKER_COMMIT="$(/usr/bin/git rev-parse --verify HEAD)"
 ENV JEKYLL_DOCKER_NAME=jekyll-docker
 ENV JEKYLL_ENV=production
 ENV JEKYLL_VAR_DIR=/var/jekyll
@@ -68,39 +68,12 @@ ENV DRAFTS=false
 # User
 #
 
-RUN apk --no-cache add \
-  lftp \
-  openssh-client \
-  rsync
-
-#
-# Packages
-# Dev
-#
-
-RUN apk --no-cache add \
-  build-base \
-  cmake \
-  imagemagick-dev \
-  libffi-dev \
-  libxml2-dev \
-  libxslt-dev \
-  readline-dev \
-  sqlite-dev \
-  vips-dev \
-  vips-tools \
-  yaml-dev \
-  zlib-dev
-
-#
-# Packages
-# Main
-#
 
 RUN apk --no-cache add \
   bash \
   git \
   less \
+  lftp \
   libffi \
   libressl \
   libxml2 \
@@ -109,7 +82,9 @@ RUN apk --no-cache add \
   nodejs \
   npm \
   openjdk8-jre \
+  openssh-client \
   readline \
+  rsync \
   shadow \
   su-exec \
   tzdata \
