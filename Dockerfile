@@ -113,8 +113,33 @@ RUN gem install --backtrace -V jekyll -v$JEKYLL_VERSION
 # User
 #
 
+# RUN gem install \
+#   html-proofer \
+#   jekyll-avatar \
+#   jekyll-coffeescript \
+#   jekyll-compose \
+#   jekyll-default-layout \
+#   jekyll-docs \
+#   jekyll-feed \
+#   jekyll-include-cache \
+#   jekyll-last-modified-at \
+#   jekyll-mentions \
+#   jekyll-optional-front-matter \
+#   jekyll-paginate \
+#   jekyll-readme-index \
+#   jekyll-redirect-from \
+#   jekyll-relative-links \
+#   jekyll-sass-converter \
+#   jekyll-seo-tag \
+#   jekyll-sitemap \
+#   jekyll-titles-from-headings \
+#   jemoji \
+#   kramdown \
+#   minima \
+#   RedCloth \
+#   s3_website
+
 RUN gem install \
-  html-proofer \
   jekyll-avatar \
   jekyll-coffeescript \
   jekyll-compose \
@@ -134,11 +159,7 @@ RUN gem install \
   jekyll-sitemap \
   jekyll-titles-from-headings \
   jemoji \
-  kramdown \
-  minima \
-  RedCloth \
-  s3_website
-
+  kramdown
 
 
 RUN addgroup -Sg 1000 jekyll
