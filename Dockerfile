@@ -12,7 +12,7 @@
 
 FROM ruby:3-alpine
 LABEL maintainer="JV conseil <contact@jv-conseil.net>"
-COPY copy /
+# COPY docker/site/copy /
 
 #
 # EnvVars
@@ -34,7 +34,7 @@ ENV RUBYOPT=-W0
 
 ENV JEKYLL_BIN=/usr/jekyll/bin
 ENV JEKYLL_DATA_DIR=/srv/jekyll
-ENV JEKYLL_DOCKER_COMMIT=03f4cd4adc82c50365e08ef784a58de41fda2be2
+ENV JEKYLL_DOCKER_COMMIT=a8a1a4935dd2d6c3fc699444da77b159ee44d4a0
 ENV JEKYLL_DOCKER_NAME=jekyll-docker
 ENV JEKYLL_ENV=production
 ENV JEKYLL_VAR_DIR=/var/jekyll
