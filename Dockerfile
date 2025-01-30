@@ -106,40 +106,15 @@ RUN unset GEM_HOME && unset GEM_BIN && \
 
 RUN unset GEM_HOME && unset GEM_BIN && yes | gem install --force bundler
 # RUN gem install jekyll -v<%= @meta.release?? @meta.release : @meta.tag %> --use-system-libraries
-RUN gem install --backtrace -V jekyll -v$JEKYLL_VERSION
+RUN gem install jekyll -v$JEKYLL_VERSION
 
 #
 # Gems
 # User
 #
 
-# RUN gem install \
-#   html-proofer \
-#   jekyll-avatar \
-#   jekyll-coffeescript \
-#   jekyll-compose \
-#   jekyll-default-layout \
-#   jekyll-docs \
-#   jekyll-feed \
-#   jekyll-include-cache \
-#   jekyll-last-modified-at \
-#   jekyll-mentions \
-#   jekyll-optional-front-matter \
-#   jekyll-paginate \
-#   jekyll-readme-index \
-#   jekyll-redirect-from \
-#   jekyll-relative-links \
-#   jekyll-sass-converter \
-#   jekyll-seo-tag \
-#   jekyll-sitemap \
-#   jekyll-titles-from-headings \
-#   jemoji \
-#   kramdown \
-#   minima \
-#   RedCloth \
-#   s3_website
-
-RUN gem install \
+RUN gem install --backtrace -V \
+  html-proofer \
   jekyll-avatar \
   jekyll-coffeescript \
   jekyll-compose \
@@ -159,7 +134,10 @@ RUN gem install \
   jekyll-sitemap \
   jekyll-titles-from-headings \
   jemoji \
-  kramdown
+  kramdown \
+  minima \
+  RedCloth \
+  s3_website
 
 
 RUN addgroup -Sg 1000 jekyll
