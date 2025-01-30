@@ -34,3 +34,4 @@ _jvcl_::update_dockerfile() {
 }
 
 _jvcl_::dockerfile_reverse_engineer "$@"
+

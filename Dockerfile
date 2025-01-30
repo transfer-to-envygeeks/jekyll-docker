@@ -11,7 +11,7 @@
 
 FROM ruby:3-alpine
 LABEL maintainer="JV conseil <contact@jv-conseil.net>"
-# COPY / /
+COPY / /
 
 #
 # EnvVars
@@ -20,7 +20,7 @@ LABEL maintainer="JV conseil <contact@jv-conseil.net>"
 
 ENV BUNDLE_APP_CONFIG=/usr/local/bundle
 ENV BUNDLE_BIN=/usr/local/bundle/bin
-ENV BUNDLE_DISABLE_PLATFORM_WARNINGS=truex
+ENV BUNDLE_DISABLE_PLATFORM_WARNINGS=true
 ENV BUNDLE_HOME=/usr/local/bundle
 ENV GEM_BIN=/usr/gem/bin
 ENV GEM_HOME=/usr/gem
@@ -62,11 +62,31 @@ ENV VERBOSE=false
 ENV FORCE_POLLING=false
 ENV DRAFTS=false
 
+
 #
 # Packages
-# User
+# Dev
 #
 
+RUN apk --no-cache add \
+  build-base \
+  cmake \
+  imagemagick-dev \
+  libffi-dev \
+  libxml2-dev \
+  libxslt-dev \
+  readline-dev \
+  ruby-dev \
+  sqlite-dev \
+  vips-dev \
+  vips-tools \
+  yaml-dev \
+  zlib-dev
+
+#
+# Packages
+# Main
+#
 
 RUN apk --no-cache add \
   bash \
@@ -105,13 +125,11 @@ RUN unset GEM_HOME && unset GEM_BIN && \
 #
 
 RUN unset GEM_HOME && unset GEM_BIN && yes | gem install --force bundler
-# RUN gem install jekyll -v<%= @meta.release?? @meta.release : @meta.tag %> --use-system-libraries
-# RUN gem install jekyll -v $JEKYLL_VERSION
 RUN gem install --backtrace jekyll -v $JEKYLL_VERSION
 
 #
 # Gems
-# User
+# Extension
 #
 
 RUN gem install --backtrace -V \
@@ -150,21 +168,21 @@ RUN adduser  -Su 1000 -G \
 # And on pages.  Gems are unsupported.
 #
 
-# RUN apk --no-cache del \
-#   build-base \
-#   cmake \
-#   imagemagick-dev\
-#   libffi-dev \
-#   libxml2-dev \
-#   libxslt-dev \
-#   linux-headers \
-#   openjdk8-jre \
-#   readline-dev \
-#   ruby-dev \
-#   vips-dev \
-#   vips-tools \
-#   yaml-dev \
-#   zlib-dev
+RUN apk --no-cache del \
+  build-base \
+  cmake \
+  imagemagick-dev\
+  libffi-dev \
+  libxml2-dev \
+  libxslt-dev \
+  linux-headers \
+  openjdk8-jre \
+  readline-dev \
+  ruby-dev \
+  vips-dev \
+  vips-tools \
+  yaml-dev \
+  zlib-dev
 
 RUN mkdir -p $JEKYLL_VAR_DIR
 RUN mkdir -p $JEKYLL_DATA_DIR

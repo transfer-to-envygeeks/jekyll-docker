@@ -11,14 +11,9 @@
   "problemMatcher": [],
   "tasks": [
     {
-      "label": "build",
-      "command": "bundle exec docker-template build jekyll-docker:latest --no-push --force --squash",
-      "detail": "docker-template build jekyll-docker:latest"
-    },
-    {
-      "label": "bundle update",
-      "command": ".bash/bundle.sh",
-      "detail": "update bundler and gems"
-    },
+      "label": "docker build",
+      "command": "docker build .",
+      "detail": "test build"
+    }
   ]
 }
