@@ -1,4 +1,3 @@
-#!/bin/sh
 #
 # Script Name : Dockerfile
 # Description : ...
@@ -38,7 +37,7 @@ ENV JEKYLL_DOCKER_COMMIT="$(/usr/bin/git rev-parse --verify HEAD)"
 ENV JEKYLL_DOCKER_NAME=jekyll-docker
 ENV JEKYLL_ENV=production
 ENV JEKYLL_VAR_DIR=/var/jekyll
-ENV JEKYLL_VERSION=4.4.1
+ENV JEKYLL_VERSION="4.4.1"
 ENV JEKYLL_DOCKER_TAG=$JEKYLL_VERSION
 
 #

@@ -17,7 +17,7 @@ _jvcl_::dockerfile_reverse_engineer() {
   local _image="${1:-jvconseil/jekyll-docker:latest}" _dump="./DockerfileReverseEngineer.txt"
   docker history --no-trunc --format='table {{.CreatedBy}}' "${_image}" |
     tail -r |
-    sed -E 's~/bin/sh -c #\(nop\) +~~g; s~/bin/sh -c ~~g;' \
+    sed -E 's~/bin/sh -c #\(nop\) +~~g; s~/bin/sh -c~RUN~g;' \
       >"${_dump}"
 }
 
@@ -34,5 +34,3 @@ _jvcl_::update_dockerfile() {
 }
 
 _jvcl_::dockerfile_reverse_engineer "$@"
-
-_jvcl_::update_dockerfile
