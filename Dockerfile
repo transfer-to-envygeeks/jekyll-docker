@@ -11,7 +11,7 @@
 
 FROM ruby:3-alpine
 LABEL maintainer="JV conseil <contact@jv-conseil.net>"
-COPY / /
+# COPY / /
 
 #
 # EnvVars
@@ -106,7 +106,8 @@ RUN unset GEM_HOME && unset GEM_BIN && \
 
 RUN unset GEM_HOME && unset GEM_BIN && yes | gem install --force bundler
 # RUN gem install jekyll -v<%= @meta.release?? @meta.release : @meta.tag %> --use-system-libraries
-RUN gem install jekyll -v $JEKYLL_VERSION
+# RUN gem install jekyll -v $JEKYLL_VERSION
+RUN gem install --backtrace jekyll -v $JEKYLL_VERSION
 
 #
 # Gems
