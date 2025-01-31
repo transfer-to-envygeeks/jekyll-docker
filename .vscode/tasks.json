@@ -12,7 +12,7 @@
   "tasks": [
     {
       "label": "docker build & push",
-      "command": "docker build -t jvconseil/jekyll-docker . && docker image ls && docker push jvconseil/jekyll-docker:4.4.1",
+      "command": "docker build -t jvconseil/jekyll-docker:4.4.1 . && docker image ls && docker push jvconseil/jekyll-docker:4.4.1",
       "detail": "docker build & push"
     }
   ]
