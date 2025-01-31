@@ -1,9 +1,0 @@
-#!/bin/bash -l
-# Copyright: 2017 - 2018 - MIT License
-# Source: https://github.com/envygeeks/devfiles
-# Author: Jordon Bedwell
-set -e
-
-if [ "$TRAVIS_PULL_REQUEST" = "false" ]
-  then bundle exec docker-template push $DOCKER_REPO
-fi

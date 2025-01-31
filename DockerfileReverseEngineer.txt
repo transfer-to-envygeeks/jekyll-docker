@@ -1,0 +1,71 @@
+ADD file:e3abcdba177145039cfef1ad882f9f81a612a24c9f044b19f713b95454d2e3f6 in / 
+CMD ["/bin/sh"]
+RUN set -eux;  apk add --no-cache   bzip2   ca-certificates   gmp-dev   libffi-dev   procps   yaml-dev   zlib-dev  ; # buildkit
+RUN set -eux;  mkdir -p /usr/local/etc;  {   echo 'install: --no-document';   echo 'update: --no-document';  } >> /usr/local/etc/gemrc # buildkit
+ENV LANG=C.UTF-8
+ENV RUBY_VERSION=3.3.2
+ENV RUBY_DOWNLOAD_URL=https://cache.ruby-lang.org/pub/ruby/3.3/ruby-3.3.2.tar.xz
+ENV RUBY_DOWNLOAD_SHA256=b5e8a8ed4a47cdd9a3358b5bdd998c37bd9e971ca63766a37d5ae5933fdb69f1
+RUN set -eux;   apk add --no-cache --virtual .ruby-builddeps   autoconf   bzip2   bzip2-dev   ca-certificates   coreutils   dpkg-dev dpkg   g++   gcc   gdbm-dev   glib-dev   libc-dev   libffi-dev   libxml2-dev   libxslt-dev   linux-headers   make   ncurses-dev   openssl   openssl-dev   patch   procps   ruby   tar   xz   yaml-dev   zlib-dev  ;   rustArch=;  apkArch="$(apk --print-arch)";  case "$apkArch" in   'x86_64') rustArch='x86_64-unknown-linux-musl'; rustupUrl='https://static.rust-lang.org/rustup/archive/1.26.0/x86_64-unknown-linux-musl/rustup-init'; rustupSha256='7aa9e2a380a9958fc1fc426a3323209b2c86181c6816640979580f62ff7d48d4' ;;   'aarch64') rustArch='aarch64-unknown-linux-musl'; rustupUrl='https://static.rust-lang.org/rustup/archive/1.26.0/aarch64-unknown-linux-musl/rustup-init'; rustupSha256='b1962dfc18e1fd47d01341e6897cace67cddfabf547ef394e8883939bd6e002e' ;;  esac;   if [ -n "$rustArch" ]; then   mkdir -p /tmp/rust;     wget -O /tmp/rust/rustup-init "$rustupUrl";   echo "$rustupSha256 */tmp/rust/rustup-init" | sha256sum --check --strict;   chmod +x /tmp/rust/rustup-init;     export RUSTUP_HOME='/tmp/rust/rustup' CARGO_HOME='/tmp/rust/cargo';   export PATH="$CARGO_HOME/bin:$PATH";   /tmp/rust/rustup-init -y --no-modify-path --profile minimal --default-toolchain '1.74.1' --default-host "$rustArch";     rustc --version;   cargo --version;  fi;   wget -O ruby.tar.xz "$RUBY_DOWNLOAD_URL";  echo "$RUBY_DOWNLOAD_SHA256 *ruby.tar.xz" | sha256sum --check --strict;   mkdir -p /usr/src/ruby;  tar -xJf ruby.tar.xz -C /usr/src/ruby --strip-components=1;  rm ruby.tar.xz;   cd /usr/src/ruby;   wget -O 'thread-stack-fix.patch' 'https://bugs.ruby-lang.org/attachments/download/7081/0001-thread_pthread.c-make-get_main_stack-portable-on-lin.patch';  echo '3ab628a51d92fdf0d2b5835e93564857aea73e0c1de00313864a94a6255cb645 *thread-stack-fix.patch' | sha256sum --check --strict;  patch -p1 -i thread-stack-fix.patch;  rm thread-stack-fix.patch;   export ac_cv_func_isnan=yes ac_cv_func_isinf=yes;   {   echo '#define ENABLE_PATH_CHECK 0';   echo;   cat file.c;  } > file.c.new;  mv file.c.new file.c;   autoconf;  gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)";  ./configure   --build="$gnuArch"   --disable-install-doc   --enable-shared   ${rustArch:+--enable-yjit}  ;  make -j "$(nproc)";  make install;   rm -rf /tmp/rust;  runDeps="$(   scanelf --needed --nobanner --format '%n#p' --recursive /usr/local    | tr ',' '\n'    | sort -u    | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }'  )";  apk add --no-network --virtual .ruby-rundeps $runDeps;  apk del --no-network .ruby-builddeps;   cd /;  rm -r /usr/src/ruby;  if   apk --no-network list --installed    | grep -v '^[.]ruby-rundeps'    | grep -i ruby  ; then   exit 1;  fi;  [ "$(command -v ruby)" = '/usr/local/bin/ruby' ];  ruby --version;  gem --version;  bundle --version # buildkit
+ENV GEM_HOME=/usr/local/bundle
+ENV BUNDLE_SILENCE_ROOT_WARNING=1 BUNDLE_APP_CONFIG=/usr/local/bundle
+ENV PATH=/usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+RUN mkdir -p "$GEM_HOME" && chmod 1777 "$GEM_HOME" # buildkit
+CMD ["irb"]
+LABEL maintainer=JV conseil <contact@jv-conseil.net>
+COPY dir:8f3476f3c09fc6ada315ed9b0884b5cb492c001bab80bb3b36e2aaca593d5d04 in / 
+ENV BUNDLE_HOME=/usr/local/bundle
+ENV BUNDLE_APP_CONFIG=/usr/local/bundle
+ENV BUNDLE_DISABLE_PLATFORM_WARNINGS=truex
+ENV BUNDLE_BIN=/usr/local/bundle/bin
+ENV GEM_BIN=/usr/gem/bin
+ENV GEM_HOME=/usr/gem
+ENV RUBYOPT=-W0
+ENV JEKYLL_VAR_DIR=/var/jekyll
+ENV JEKYLL_DOCKER_TAG=4.3.3
+ENV JEKYLL_VERSION=4.3.3
+ENV JEKYLL_DOCKER_COMMIT=9ba5d71634b6a74cb5dc118f33eda2a8de2df982
+ENV JEKYLL_DOCKER_NAME=jekyll-docker
+ENV JEKYLL_DATA_DIR=/srv/jekyll
+ENV JEKYLL_BIN=/usr/jekyll/bin
+ENV JEKYLL_ENV=development
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV TZ=America/Chicago
+ENV PATH=/usr/jekyll/bin:/usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US
+ENV JEKYLL_ENV=production
+ENV VERBOSE=false
+ENV FORCE_POLLING=false
+ENV DRAFTS=false
+apk --no-cache add rsync openssh-client lftp git
+apk --no-cache add   zlib-dev   libffi-dev   build-base   libxml2-dev   imagemagick-dev   readline-dev   libxslt-dev   libffi-dev   yaml-dev   zlib-dev   vips-dev   vips-tools   sqlite-dev   cmake
+apk --no-cache add   linux-headers   openjdk8-jre   less   zlib   libxml2   readline   libxslt   libffi   git   nodejs   tzdata   shadow   bash   su-exec   npm   libressl   yarn
+echo "gem: --no-ri --no-rdoc" > ~/.gemrc
+unset GEM_HOME && unset GEM_BIN &&   yes | gem update --system
+unset GEM_HOME && unset GEM_BIN && yes | gem install --force bundler
+gem install jekyll -v$JEKYLL_VERSION
+gem install html-proofer jekyll-avatar jekyll-coffeescript jekyll-compose jekyll-default-layout jekyll-docs jekyll-feed jekyll-include-cache jekyll-last-modified-at jekyll-mentions jekyll-optional-front-matter jekyll-paginate jekyll-readme-index jekyll-redirect-from jekyll-relative-links jekyll-sass-converter jekyll-seo-tag jekyll-sitemap jekyll-titles-from-headings jemoji kramdown minima RedCloth s3_website
+addgroup -Sg 1000 jekyll
+adduser  -Su 1000 -G   jekyll jekyll
+mkdir -p $JEKYLL_VAR_DIR
+mkdir -p $JEKYLL_DATA_DIR
+chown -R jekyll:jekyll $JEKYLL_DATA_DIR
+chown -R jekyll:jekyll $JEKYLL_VAR_DIR
+chown -R jekyll:jekyll $BUNDLE_HOME
+rm -rf /home/jekyll/.gem
+rm -rf $BUNDLE_HOME/cache
+rm -rf $GEM_HOME/cache
+rm -rf /root/.gem
+mkdir -p /usr/gem/cache/bundle
+chown -R jekyll:jekyll   /usr/gem/cache/bundle
+CMD ["jekyll" "--help"]
+ENTRYPOINT ["/usr/jekyll/bin/entrypoint"]
+WORKDIR /srv/jekyll
+VOLUME [/srv/jekyll]
+EXPOSE 35729
+EXPOSE 4000
+
+CREATED BY

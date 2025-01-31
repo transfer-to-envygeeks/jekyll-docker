@@ -1,0 +1,42 @@
+# Deploy to Docker Hub
+# See <https://github.com/marketplace/actions/jekyll-builder-for-github-pages>
+# Copyright (c) 2019-2023 JV-conseil, All rights reserved
+name: "Build"
+
+on: pull-request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    name: "Build"
+
+    strategy:
+      matrix:
+        env:
+          # - jekyll:latest
+          # - jekyll-minimal:latest
+          # - jekyll:pages
+          - jekyll-docker:latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Setup Ruby"
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - run: bundle install
+
+      - name: "Docker Experimental"
+        run: |
+          echo $'{\n    "experimental": true\n}' | \
+            sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker
+
+      - run: bundle exec docker-template build $DOCKER_REPO --no-push --force --squash
+        env:
+          RUBYOPT: "-W0"
+          DOCKER_REPO: "${{join(matrix.env, ' ')}}"

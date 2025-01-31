@@ -53,3 +53,10 @@ yarn.lock
 # Editor
 #
 /.idea
+
+#
+# Git
+#
+/.git
+_deprecated
+/*.txt

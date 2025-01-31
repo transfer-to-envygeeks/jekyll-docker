@@ -1,7 +1,0 @@
-inherit_gem:
-  envygeeks-rubocop:
-    - rules.yml
-Style/SingleLineMethods: { Enabled: false }
-Layout/EmptyLineBetweenDefs: { Enabled: false }
-Style/StringLiterals:
-  EnforcedStyle: double_quotes

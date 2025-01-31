@@ -1,0 +1,19 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "type": "shell",
+  "presentation": {
+    "panel": "new",
+    "focus": true,
+    "revealProblems": "onProblem",
+  },
+  "problemMatcher": [],
+  "tasks": [
+    {
+      "label": "docker build & push",
+      "command": "docker build -t jvconseil/jekyll-docker:4.4.1 . && docker image ls && docker push jvconseil/jekyll-docker:4.4.1",
+      "detail": "docker build & push"
+    }
+  ]
+}

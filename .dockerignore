@@ -58,3 +58,8 @@ yarn.lock
 # Git
 #
 /.git
+_deprecated
+/*.txt
+/.bash
+/.github
+/.vscode
