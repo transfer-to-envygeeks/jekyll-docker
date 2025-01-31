@@ -44,7 +44,7 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
-          # context: .
+          context: .
           # file: ./Dockerfile
           push: true
           tags: user/app:latest

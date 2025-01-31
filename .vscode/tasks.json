@@ -11,9 +11,9 @@
   "problemMatcher": [],
   "tasks": [
     {
-      "label": "docker build",
-      "command": "docker build .",
-      "detail": "test build"
+      "label": "docker build & push",
+      "command": "docker build -t jvconseil/jekyll-docker . && docker image ls && docker push jvconseil/jekyll-docker",
+      "detail": "docker build & push"
     }
   ]
 }
